@@ -96,7 +96,7 @@ Example Usage :
             new SchemaDataSupplier().get(schema);
         } 
 ```
-This only provides java objects as output. Use can use another libraries for jsonification,like
+This only provides java objects as output. Use can use library of choice for jsonification,like
 
 Using Jackson
 
