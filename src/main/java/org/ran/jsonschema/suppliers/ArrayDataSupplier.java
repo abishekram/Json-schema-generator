@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.ran.jsonschema.RandomUtils.getRandomInteger;
+
 public class ArrayDataSupplier extends AbstractDataSupplier<ArraySchema, List> {
 
     @Override
@@ -26,8 +28,8 @@ public class ArrayDataSupplier extends AbstractDataSupplier<ArraySchema, List> {
     private void appendItem(List<Object> arrayitems, ArraySchema schema) {
         int maxItems = Optional.ofNullable(schema.getMaxItems()).orElse(5);
         int minItems = Optional.ofNullable(schema.getMinItems()).orElse(1);
-        RandomNumberSupplier randomNumberSupplier = new RandomNumberSupplier();
-        int randomTotalItems = randomNumberSupplier.getRandomInteger(maxItems, minItems);
+
+        int randomTotalItems = getRandomInteger(maxItems, minItems, 1);
         while (arrayitems.size() <= randomTotalItems) {
             appendSingleItem(arrayitems, schema);
         }
@@ -41,6 +43,5 @@ public class ArrayDataSupplier extends AbstractDataSupplier<ArraySchema, List> {
         schema.getItemSchemas().forEach(itemSchema ->
                 jsonArray.add(SupplyResolver.resolve(itemSchema).forSchema(itemSchema))
         );
-
     }
 }

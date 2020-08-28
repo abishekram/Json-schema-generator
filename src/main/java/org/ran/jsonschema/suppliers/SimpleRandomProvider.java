@@ -8,16 +8,16 @@ import org.ran.jsonschema.SupplyResolver;
 
 import java.util.Random;
 
+import static org.ran.jsonschema.RandomUtils.getRandomInteger;
+
 public class SimpleRandomProvider {
 
     public static final AbstractDataSupplier<EnumSchema, String> enumDataProvider = new AbstractDataSupplier<EnumSchema, String>() {
         @Override
         public String generateDataFromSchema(EnumSchema schema) {
-            int position = new RandomNumberSupplier().getRandomInteger(schema.getPossibleValues().size() - 1, 0);
+            int position = getRandomInteger(schema.getPossibleValues().size() - 1, 0, 1);
             return String.valueOf(schema.getPossibleValuesAsList().get(position));
         }
-
-
     };
 
     public static final AbstractDataSupplier<BooleanSchema, Boolean> booleanDataProvider = new AbstractDataSupplier<BooleanSchema, Boolean>() {

@@ -3,28 +3,35 @@ package org.ran.jsonschema.suppliers;
 import org.everit.json.schema.NumberSchema;
 
 import java.util.Optional;
-import java.util.Random;
+
+import static org.ran.jsonschema.RandomUtils.getRandomInteger;
+import static org.ran.jsonschema.RandomUtils.getRandomNumber;
 
 public class NumberDataSupplier extends AbstractDataSupplier<NumberSchema, Number> {
 
-    private final RandomNumberSupplier randomNumberSupplier = new RandomNumberSupplier();
-
     @Override
     public Number generateDataFromSchema(NumberSchema schema) {
+
         Number max = Optional.ofNullable(schema.getMaximum()).orElse(100);
-        Number min = Optional.ofNullable(schema.getMinimum()).orElse(1);
-        if (schema.requiresInteger()) {
-            return randomNumberSupplier.getRandomInteger(max.intValue(), min.intValue());
-        } else {
-            return getRandomNumber(max.doubleValue(), min.doubleValue());
+        if (schema.isExclusiveMaximum()) {
+            max = max.doubleValue() - 1;
         }
 
+        Number min = Optional.ofNullable(schema.getMinimum()).orElse(1);
+        if (schema.isExclusiveMinimum()) {
+            min = min.doubleValue() + 1;
+        }
+
+        if (schema.requiresInteger()) {
+            Number multipleOf = Optional.ofNullable(schema.getMultipleOf()).orElse(1);
+            return getRandomInteger(max.intValue(), min.intValue(), multipleOf.intValue());
+        } else {
+            Number multipleOf = schema.getMultipleOf();
+            if (multipleOf == null) {
+                return getRandomNumber(max.doubleValue(), min.doubleValue());
+            } else {
+                return getRandomNumber(max.doubleValue(), min.doubleValue(), multipleOf.doubleValue());
+            }
+        }
     }
-
-    private Double getRandomNumber(double rangeMax, double rangeMin) {
-        Random random = new Random();
-        return rangeMin + (rangeMax - rangeMin) * random.nextDouble();
-
-    }
-
 }

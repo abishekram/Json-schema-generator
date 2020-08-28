@@ -22,13 +22,21 @@ public class SupplyResolver {
 
     static {
         availableSuppliers.put(ObjectSchema.class.getName(), new ObjectDataSupplier());
-        availableSuppliers.put(StringSchema.class.getName(), new StringDataGenerator());
+        availableSuppliers.put(StringSchema.class.getName(), new StringDataSupplier());
         availableSuppliers.put(ArraySchema.class.getName(), new ArrayDataSupplier());
         availableSuppliers.put(NumberSchema.class.getName(), new NumberDataSupplier());
         availableSuppliers.put(BooleanSchema.class.getName(), booleanDataProvider);
         availableSuppliers.put(EnumSchema.class.getName(), enumDataProvider);
         availableSuppliers.put(ReferenceSchema.class.getName(), referenceDataProvider);
         availableSuppliers.put(NullSchema.class.getName(),nullDataProvider);
+        availableSuppliers.put(CombinedSchema.class.getName(), new CombinedDataSupplier());
+        // need to realize:
+        // ConstSchema - draft 7-0
+        // ConditionalSchema - draft 7-0
+        // EmptySchema
+        // FalseSchema - draft 6-0
+        // NotSchema
+        // TrueSchema - draft 6-0
     }
 
     public static DataSupplier<Schema, String> resolve(Schema schema) {
